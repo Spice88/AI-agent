@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+import sys
 
 load_dotenv()
 api_key = os.environ.get("GEMINI_API_KEY")
@@ -15,7 +16,12 @@ def main():
 if __name__ == "__main__":
     main()
 
-ai_response = client.models.generate_content(model="gemini-2.0-flash-001", contents="Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum.")
+if len(sys.argv) > 1:
+    prompt = sys.argv[1]
+else:
+    print("No prompt provided.")
+    sys.exit(1)
+ai_response = client.models.generate_content(model="gemini-2.0-flash-001", contents=prompt)
 
 print(ai_response.text)
 print(f"Prompt tokens: {ai_response.usage_metadata.prompt_token_count}")
